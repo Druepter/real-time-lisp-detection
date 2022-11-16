@@ -1,4 +1,4 @@
-function islisp = lispanalyze(audio, fs, normal, lisp, rest)
+function isLisp = lispAnalyze(audio, normal, lisp, rest)
     disp("analyzing...")
 
     % use standard deviation to detect speech
@@ -9,16 +9,16 @@ function islisp = lispanalyze(audio, fs, normal, lisp, rest)
     % reference mean found during calibration
     disp(std(audio))
 
-    audiofft = fft(audio);
+    audioFft = fft(audio);
 
     % return 1 if this segment is a lisp and -1 if non-lisp
-    if examinesegment(audiofft, lisp, rest)
+    if examineSegment(audioFft, lisp, rest)
         disp("Lisp detected!")
-        islisp = 1;
-    elseif examinesegment(audiofft, normal, rest)
+        isLisp = 1;
+    elseif examineSegment(audioFft, normal, rest)
         disp("No lisp detected!")
-        islisp = -1;
+        isLisp = -1;
     end
     % otherwise return 0
-    islisp = 0;
+    isLisp = 0;
 end

@@ -13,13 +13,15 @@ Out = audioDeviceWriter;
 Out.Device = "default";
 
 %% default values
+mode = "lisp";
 % these are just based on my results from the julia script
 normalFreqs = [1052, 1352];
 lispFreqs = [5517, 6514];
 restFreqs = [1000, 22050];
+params = [normalFreqs', lispFreqs', restFreqs'];
 
 %% loop over analyze
-i = 1;
+i = 0;
 count = 0;
 
 tic
@@ -30,17 +32,6 @@ while toc
      step(Out, y);
 
      % actually run the analyze
-     % +1 for lisp and -1 for non-lisp
-     count = count + lispanalyze(x, sampleRate, normalFreqs, lispFreqs, restFreqs);
-
-     if i == 10
-         % check if lisping beats out non-lisping
-         if count > 0
-             % this is where the actual warning should be
-             disp("Lots of lisping!")
-         end
-     else
-         i = i + 1;
-     end
+     i, count = callAnalyze(mode, i, count, params);
 end    
 
