@@ -12,13 +12,6 @@ In.SamplesPerFrame = sampleRate * frameLength;
 Out = audioDeviceWriter;
 Out.Device = "default";
 
-%% default values
-%mode = "lisp";
-% these are just based on my results from the julia script
-%normalFreqs = [1052, 1352];
-%lispFreqs = [5517, 6514];
-%restFreqs = [1000, 22050];
-%params = [normalFreqs', lispFreqs', restFreqs'];
 
 
 %% read calibration file
@@ -34,14 +27,24 @@ mode = string(mode);
 % get normalFreqs from cell array
 normalFreqs = calibration{1}(3, 1);
 normalFreqs = cell2mat(normalFreqs);
+normalFreqs = strsplit(normalFreqs,',');
+normalFreqs = str2double(normalFreqs);
 
 % get lispFreqs from cell array
 lispFreqs = calibration{1}(4, 1);
 lispFreqs = cell2mat(lispFreqs);
+lispFreqs = strsplit(lispFreqs,',');
+lispFreqs = str2double(lispFreqs);
 
 % get lispFreqs from cell array
-restFreqs = calibration{1}(4, 1);
+restFreqs = calibration{1}(5, 1);
 restFreqs = cell2mat(restFreqs);
+restFreqs = strsplit(restFreqs,',');
+restFreqs = str2double(restFreqs);
+
+
+params = [normalFreqs', lispFreqs', restFreqs'];
+
 
 %% loop over analyze
 i = 0;
