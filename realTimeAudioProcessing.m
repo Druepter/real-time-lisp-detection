@@ -36,7 +36,7 @@ lispFreqs = cell2mat(lispFreqs);
 lispFreqs = strsplit(lispFreqs,',');
 lispFreqs = str2double(lispFreqs);
 
-% get lispFreqs from cell array
+% get restFreqs from cell array
 restFreqs = calibration{1}(4, 1);
 restFreqs = cell2mat(restFreqs);
 restFreqs = strsplit(restFreqs,',');
