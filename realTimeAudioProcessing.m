@@ -32,6 +32,6 @@ while toc
      step(Out, y);
 
      % actually run the analyze
-     i, count = callAnalyze(mode, i, count, params);
+     i, count = callAnalyze(mode, i, count, x, params);
 end    
 
