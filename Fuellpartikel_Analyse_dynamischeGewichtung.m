@@ -70,6 +70,8 @@ function isHit = fuellpartikel(audio, pt, f)
     
     regions.regionDurInSeconds = (pt.t(regions.regionEnd) - pt.t(regions.regionStart));
     
+    NumberOfConditionsPerRegion = [];
+    
     for i = 1:regions.numberOfRegions
         % regionalF0 beschreiben 
     
@@ -98,11 +100,10 @@ function isHit = fuellpartikel(audio, pt, f)
 
         % NumberOfConditionsPerRegion = Array das angibt wieviele Füllpartikel-Kriterien in den Regionen zutreffen%
     
+        NumberOfConditionsPerRegion(i) = 0;
         if regionalF0 <= F0Global && regions.regionDurInSeconds(i) >= minRegionDuration
             weight = (abs(regionalF0 - F0Global)/F0Global)*maxGewichtungBed1;                  %dynamische Gewichtung zwischen 0 und oben festgelegtem Maximalwert
             NumberOfConditionsPerRegion(i) = NumberOfConditionsPerRegion(i) + weight;
-        else
-            NumberOfConditionsPerRegion(i) = 0;
         end
     end
     
@@ -162,9 +163,9 @@ function isHit = fuellpartikel(audio, pt, f)
 
         totalF1 = 0;
         totalF2 = 0;
-        for i = f.formantRegionStart(1,i):f.formantRegionEnd(1,i)
-            totalF1 = totalF1 + f.F1(i);
-            totalF2 = totalF2 + f.F2(i);
+        for j = f.formantRegionStart(1,i):f.formantRegionEnd(1,i)
+            totalF1 = totalF1 + f.F1(j);
+            totalF2 = totalF2 + f.F2(j);
         end
         f.regionalF1(i) = totalF1./(f.formantRegionEnd(1,i)-f.formantRegionStart(1,i)+1);
         f.regionalF2(i) = totalF2./(f.formantRegionEnd(1,i)-f.formantRegionStart(1,i)+1);
@@ -202,7 +203,9 @@ function isHit = fuellpartikel(audio, pt, f)
     end 
     
     isHit = 0;
-    if sum(NumberOfConditionsPerRegion(:) > 0.2 * sum([maxGewichtungBed1, maxGewichtungBed2, maxGewichtungBed3, maxGewichtungBed4])) > fillerThreshold
+    hitCondition = 0.2 * sum([maxGewichtungBed1, maxGewichtungBed2, maxGewichtungBed3, maxGewichtungBed4]);
+    numHits = sum(NumberOfConditionsPerRegion(:) > hitCondition);
+    if numHits > fillerThreshold
         isHit = 1;
     end
 end
